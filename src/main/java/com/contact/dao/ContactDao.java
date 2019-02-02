@@ -1,7 +1,9 @@
 package com.contact.dao;  
 import java.sql.ResultSet;  
 import java.sql.SQLException;  
-import java.util.List;  
+import java.util.List;
+
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;  
 import org.springframework.jdbc.core.RowMapper;
 
@@ -27,7 +29,7 @@ public int delete(int id){
 }  
 public Contact getContactById(int id){  
     String sql="select * from contact where id=?";
-    return (String)getJdbcTemplate().queryForObject(sql, new Object[] { id }, Contact.class);
+    return template.queryForObject(sql, new Object[]{id},new BeanPropertyRowMapper<Contact>(Contact.class)); 
 }  
 public List<Contact> getContacts(){  
     return template.query("select * from contact",new RowMapper<Contact>(){  
@@ -43,7 +45,7 @@ public List<Contact> getContacts(){
 
 public List<Contact> SearchContacts(String name, String email) {
 	 String query = "select * from contact where name=? and email = ?";
-	 return (String)getJdbcTemplate().queryForObject(sql, new Object[] { name, email }, Contact.class);
+	 return  (List<Contact>) template.queryForObject(query, new Object[]{name, email},new BeanPropertyRowMapper<Contact>(Contact.class));
 }
 	
 }  
